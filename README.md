@@ -8,7 +8,7 @@ and also create an api to make user profiles, create different tips for each map
 - Must have indivitual profiles
 - User must be able to view his Valorant stats on his profile
 - User must be able to view other players profiles and stats
-- User must be able to see tips for any maps/agent aswell as add new tips or strategies 
+- User must be able to see tips for any maps/agent aswell as adding new tips or strategies 
 
 ## Should have
 - A user should be able to see his match history
@@ -16,10 +16,57 @@ and also create an api to make user profiles, create different tips for each map
 - The users should be able to search different player profiles
 
 ## Could have 
-- The users could be able to add comments to other player profiles / matches 
+- The users could be able to add comments to other player profiles
 - There could be a badge system on the profiles based on their stats
 - The tips could be youtube videos
 
 ## Will not have
 - The app wont track any other games
 
+# Diagram
+
+```mermaid
+erDiagram
+    USER ||--o{ ACCOUNT : creates
+    ACCOUNT ||--|{ PLAYER-DATA : contains
+    ACCOUNT ||--|{ MATCH-HISTORY : contains
+    ACCOUNT ||--|{ TIPS-STRATEGIES : contains
+    ACCOUNT ||--|{ COMMENTS : has
+    USER ||--o{ TIPS-STRATEGIES : creates
+    USER ||--o{ COMMENTS : creates
+    
+```
+
+# Entity relation diagram
+```mermaid
+erDiagram
+    USER ||--o{ ACCOUNT : creates
+    ACCOUNT {
+        int user_id pk
+        varchar username
+        varchar email
+        varchar password
+        varchar ValorantID
+        varchar tag
+    }
+    USER ||--|{ COMMENTS : creates
+    COMMENTS {
+        int id pk
+        int user_id
+        varchar ValorantID
+        varchar tag
+        varchar text
+    }
+
+        USER ||--|{ TIPS-STRATEGIES : creates
+    TIPS-STRATEGIES {
+        int id pk
+        int user_id
+        varchar ValorantID
+        varchar tag
+        varchar title
+        varchar text
+        varchar video_link
+    }
+
+```
