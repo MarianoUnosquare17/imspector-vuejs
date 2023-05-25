@@ -27,13 +27,14 @@ and also create an api to make user profiles, create different tips for each map
 
 ```mermaid
 erDiagram
-    USER ||--o{ ACCOUNT : creates
-    ACCOUNT ||--|{ PLAYER-DATA : contains
-    ACCOUNT ||--|{ MATCH-HISTORY : contains
-    ACCOUNT ||--|{ TIPS-STRATEGIES : contains
-    ACCOUNT ||--|{ COMMENTS : has
-    USER ||--o{ TIPS-STRATEGIES : creates
-    USER ||--o{ COMMENTS : creates
+    
+    USER_ACCOUNT ||--|{ PLAYER_STATS : has
+    PLAYER_STATS ||--|{ MATCH_HISTORY : has
+    MATCH_HISTORY ||--|{ MATCH : has
+    MATCH ||--|{ COMMENTS : has
+    USER_ACCOUNT ||--o{ TACTICS : creates
+    PLAYER_STATS ||--o{ TACTICS : has
+    USER_ACCOUNT ||--o{ COMMENTS : creates
     
 ```
 
