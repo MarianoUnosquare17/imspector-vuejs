@@ -74,6 +74,7 @@ erDiagram
         int score
         varchar map
         varchar mode
+        varchar agent
         date date_played
         int score
         int kills
