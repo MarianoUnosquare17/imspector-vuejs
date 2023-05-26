@@ -84,6 +84,7 @@ erDiagram
     ACCOUNT_GAME ||--|{ ACCOUNT_GAME_COMMENTS : has
     ACCOUNT_GAME_COMMENTS{
         int id pk
+        date date_created
         varchar made_by
         varchar account_comment
     }
@@ -99,6 +100,7 @@ erDiagram
     USER_ACCOUNT ||--o{ USER_ACCOUNT_COMMENTS : creates
         USER_ACCOUNT_COMMENTS{
         int id pk
+        date date_created
         varchar made_by
         varchar account_comment
     }
