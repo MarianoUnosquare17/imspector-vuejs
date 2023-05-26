@@ -30,8 +30,8 @@ erDiagram
     
     USER_ACCOUNT ||--|{ PLAYER_STATS : has
     PLAYER_STATS ||--|{ MATCH_HISTORY : has
-    MATCH_HISTORY ||--|{ MATCH : has
-    MATCH ||--|{ COMMENTS : has
+    MATCH_HISTORY ||--|{ ACCOUNT_GAME : has
+    ACCOUNT_GAME ||--|{ COMMENTS : has
     USER_ACCOUNT ||--o{ TACTICS : creates
     PLAYER_STATS ||--o{ TACTICS : has
     USER_ACCOUNT ||--o{ COMMENTS : creates
@@ -41,33 +41,65 @@ erDiagram
 # Entity relation diagram
 ```mermaid
 erDiagram
-    USER ||--o{ ACCOUNT : creates
-    ACCOUNT {
-        int user_id pk
+    USER_ACCOUNT ||--o{ PLAYER_STATS : has
+    USER_ACCOUNT {
+        int id pk
         varchar username
         varchar email
         varchar password
-        varchar ValorantID
-        varchar tag
+        varchar valorant_account
+        varchar valorant_tag
     }
-    USER ||--|{ COMMENTS : creates
-    COMMENTS {
+        PLAYER_STATS {
         int id pk
-        int user_id
-        varchar ValorantID
-        varchar tag
-        varchar text
+        varchar valorant_account
+        varchar valorant_tag
+        varchar level
+        varchar region
+        varchar player_card
     }
+    PLAYER_STATS ||--|{ MATCH_HISTORY : has
 
-        USER ||--|{ TIPS-STRATEGIES : creates
-    TIPS-STRATEGIES {
+    MATCH_HISTORY{
         int id pk
-        int user_id
-        varchar ValorantID
-        varchar tag
-        varchar title
-        varchar text
-        varchar video_link
+        int score
+        varchar map
+        varchar kda
+        varchar mode
     }
-
+    MATCH_HISTORY ||--|{ ACCOUNT_GAME : has
+    ACCOUNT_GAME{
+        int id pk
+        int score
+        varchar map
+        varchar mode
+        int score
+        int kills
+        int deaths
+        int assists
+        int bodyshots
+        int headshots
+        int legshots 
+    }
+    ACCOUNT_GAME ||--|{ ACCOUNT_GAME_COMMENTS : has
+    ACCOUNT_GAME_COMMENTS{
+        int id pk
+        varchar made_by
+        varchar account_comment
+    }
+    USER_ACCOUNT ||--o{ TACTICS : creates
+    TACTICS{
+        int id pk
+        varchar made_by
+        varchar map
+        varchar agent
+        varchar tactic
+    }
+    PLAYER_STATS ||--o{ TACTICS : has
+    USER_ACCOUNT ||--o{ USER_ACCOUNT_COMMENTS : creates
+        USER_ACCOUNT_COMMENTS{
+        int id pk
+        varchar made_by
+        varchar account_comment
+    }
 ```
