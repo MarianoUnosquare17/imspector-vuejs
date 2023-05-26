@@ -63,6 +63,7 @@ erDiagram
     MATCH_HISTORY{
         int id pk
         int score
+        date date_played
         varchar map
         varchar kda
         varchar mode
@@ -73,6 +74,7 @@ erDiagram
         int score
         varchar map
         varchar mode
+        date date_played
         int score
         int kills
         int deaths
