@@ -1,0 +1,19 @@
+{
+  "name": "vuejs-practice",
+  "version": "1.0.0",
+  "description": "Create an application that tracks Valorant profiles, stats, match history, match data using this api  https://docs.henrikdev.xyz/valorant.html\r and also create an api to make user profiles, create different tips for each map aswell as adding their own strategies for any maps/agent",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarianoUnosquare17/imspector-vuejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarianoUnosquare17/imspector-vuejs/issues"
+  },
+  "homepage": "https://github.com/MarianoUnosquare17/imspector-vuejs#readme"
+}
