@@ -131,13 +131,13 @@ erDiagram
 
 + GET /comments - Get all comments
 
-+ GET /user/{id_match}/comments - Get the comments inside the match
++ GET comments/{valorant_account}/{map}/{id_match} - Get the comments inside the match
 
-+ POST /user/{id_match}/comments - Post a comment inside the match
++ POST comments/{valorant_account}/{map}/{id_match} - Post a comment inside the match
 
-+ UPDATE /user/{id_match}/comments - Update a comment inside the match
++ UPDATE comments/{valorant_account}/{map}/{id_match} - Update a comment inside the match
 
-+ DELETE /user/{id_match}/comments - Update a comment inside the match
++ DELETE comments/{valorant_account}/{map}/{id_match} - Update a comment inside the match
 
 ## Tactics
 
@@ -149,17 +149,17 @@ erDiagram
 
 + GET /tactics/{valorant_account} - Get all tactics created by that user
 
-+ POST /tactics/{map} - Post a new tactic for the specified map
++ POST /tactics/{valorant_account}/{map} - Post a new tactic for the specified map
 
-+ POST /tactics/{agent} - Post a new tactic for the specified agent
++ POST /tactics/{valorant_account}/{agent} - Post a new tactic for the specified agent
 
-+ UPDATE /tactics/{map}/{id} - Update tactic
++ UPDATE /tactics/{valorant_account}/{map}/{tactic_id} - Update tactic
 
-+ UPDATE /tactics/{agent}/{id} - Update tactic
++ UPDATE /tactics/{valorant_account}/{agent}/{tactic_id} - Update tactic
 
-+ DELETE /tactics/{map}/{id} - Delete tactic
++ DELETE /tactics/{map}/{tactic_id} - Delete tactic
 
-+ DELETE /tactics/{agent}/{id} -Delete tactic
++ DELETE /tactics/{agent}/{tactic_id} -Delete tactic
 
 
 
