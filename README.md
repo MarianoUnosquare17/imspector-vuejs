@@ -117,49 +117,24 @@ erDiagram
 ## Users
 
 + GET /users - Returns all users
-
 + GET /users/{valorant_account} - Returns the user associated to the Valorant account
-
 + POST /users - Creates an user
-
 + UPDATE /users/{id} - Updates the data for the selected user
-
 + DELETE /users/{id} - Deletes the selected user
-
 
 ## Comments
 
-+ GET /comments - Get all comments
-
-+ GET comments/{valorant_account}/{map}/{id_match} - Get the comments inside the match
-
-+ POST comments/{valorant_account}/{map}/{id_match} - Post a comment inside the match
-
-+ UPDATE comments/{valorant_account}/{map}/{id_match} - Update a comment inside the match
-
-+ DELETE comments/{valorant_account}/{map}/{id_match} - Update a comment inside the match
++ GET /comments?valorant_account=X&map=Y&matchId=Z - Get all comments, can be filtered by match, map or valorant account
++ GET /comments/{commentId} - Get the complete comment details
++ POST /comments - Creates a new comment, includes the valorant account, map and match
++ UPDATE /comments/{commentId} - Update a comment inside the match
++ DELETE /comments/{commentId} - Deletes a comment inside the match
 
 ## Tactics
 
-+ GET /tactics - Get all tactics
-
-+ GET /tactics/{map} - Get all tactics for a specific map
-
-+ GET /tactics/{agent} - Get all tactics for an agent
-
-+ GET /tactics/{valorant_account} - Get all tactics created by that user
-
-+ POST /tactics/{valorant_account}/{map} - Post a new tactic for the specified map
-
-+ POST /tactics/{valorant_account}/{agent} - Post a new tactic for the specified agent
-
-+ UPDATE /tactics/{valorant_account}/{map}/{tactic_id} - Update tactic
-
-+ UPDATE /tactics/{valorant_account}/{agent}/{tactic_id} - Update tactic
-
-+ DELETE /tactics/{map}/{tactic_id} - Delete tactic
-
-+ DELETE /tactics/{agent}/{tactic_id} -Delete tactic
-
-
++ GET /tactics?map=x&agent=y&valorant_account=z Get all tactics, can be filtered by map, agent or valorant account
++ POST /map/{mapId}/tactics/ - Post a new tactic for the specified map
++ POST /agent/{agentId}/tactics/ - Post a new tactic for the specified agent
++ UPDATE /tactics/{tactic_id} - Update tactic
++ DELETE /tactics/{tactic_id} - Delete tactic
 
