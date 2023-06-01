@@ -3,10 +3,10 @@ import { Router } from "express";
 const commentRouter = Router();
 /**
 * @openapi
-* /Comments:
+* /Tactics:
 *   get:
 *     tags: [
-*        Gomments
+*        Tactics
 *     ]
 *     parameters:
 *       - name: offset
