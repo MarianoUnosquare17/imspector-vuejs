@@ -47,7 +47,7 @@ const tacticsRouter = Router();
  */
 
 
-tacticsRouter.route("/tactics").get((req, res) => {
+tacticsRouter.route("/").get((req, res) => {
     const {
         map,
         agent,

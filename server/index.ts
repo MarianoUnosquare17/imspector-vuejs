@@ -27,14 +27,16 @@ const swaggerDefinition = {
   const app = express();
 const port = 3001;
 
-app.use('/users', userRouter)
-app.use('/comments', commentRouter)
-app.use('/tactics', tacticsRouter)
 
   app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(openapiSpecification));
   app.use("/swagger.json", (req: Request, res: Response) =>
     res.json(openapiSpecification).status(200)
   );
+
+  
+app.use('/users', userRouter)
+app.use('/comments', commentRouter)
+app.use('/tactics', tacticsRouter)
   
   app.listen(port, () => console.log(`Application started on port: ${port}`));
 

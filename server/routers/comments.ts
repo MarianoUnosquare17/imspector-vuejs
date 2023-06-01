@@ -46,7 +46,7 @@ const commentRouter = Router();
 * 
  */
 
-commentRouter.route("/comments").get((req, res) => {
+commentRouter.route("/").get((req, res) => {
     const {
         valorant_account,
         map,
@@ -64,7 +64,7 @@ commentRouter.route("/comments").get((req, res) => {
     } else res.send("Get all comments")
     });
 commentRouter.route("/tactics/:commentId").get((req, res) => { res.send("Get comment details given the id " + req.params.commentId ) });
-commentRouter.route("/comments").post((req, res) => { res.send("Created comment" )});
+commentRouter.route("/").post((req, res) => { res.send("Created comment" )});
 commentRouter.route("/tactics/:commentId").put((req, res) => { res.send("Updated comment with the id " + req.params.commentId )});
 commentRouter.route("/tactics/:commentId").delete((req, res) => { res.send("Deleted comment with the id" + req.params.commentId) });
 
