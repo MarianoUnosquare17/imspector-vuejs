@@ -9,14 +9,18 @@ const tacticsRouter = Router();
 *        Tactics
 *     ]
 *     parameters:
-*       - name: offset
+*       - name: map
 *         in: query
-*         type: integer
-*         description: The number of items to skip before starting to collect the result set.
-*       - name: limit
+*         type: string
+*         description: filter maps.
+*       - name: agent
 *         in: query
-*         type: integer
-*         description: The maximum numbers of items to return.
+*         type: string
+*         description: filter agents.
+*       - name: valorant_account
+*         in: query
+*         type: string
+*         description: filter valorant_accounts.
 *     responses:
 *       200:
 *         description: OK
@@ -26,15 +30,100 @@ const tacticsRouter = Router();
 *                     jsonObject:
 *                         summary: An example JSON response
 *                         value: '[
-*                          { "id": 1, "firstName": "Sundar", "lastName": "Pichai", "displayImageUrl": https://thispersondoesnotexist.com/image, "email": sundar.pichai@google.com, "phone": "0800001066", "jobTitle": "CEO", "role": { "id": 1, "description": "Admin" } }, { "id": 2, "firstName": "Matt", "lastName": "Cutts", "displayImageUrl": https://thispersondoesnotexist.com/image, "email": matt.cutts@google.com, "phone": "0800001066", "jobTitle": "Software Dev", "role": { "id": 2, "description": "Sales Rep" } }]'
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
 *       204:
-*         description: No Content
+*         description: No tactic found
 *         content:
 *             application/json:
 *                 examples:
 *                     jsonObject:
 *                         summary: An example JSON response
-*                         value: '{ "message": "No Content" }'
+*                         value: '{ "message": "Tactic not found" }'
+* /map/{mapId}/tactics:
+*   post:
+*     tags: [
+*        Tactics
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
+*       204:
+*         description: No user found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "User not found" }'
+*       401:
+*         description: Unauthorized
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Unauthorized" }'
+* /agent/{agentId}/tactics:
+*   post:
+*     tags: [
+*        Tactics
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
+*       204:
+*         description: No user found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "User not found" }'
+*       401:
+*         description: Unauthorized
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Unauthorized" }'
+* /tactics/{tactic_id}:
+*   put:
+*     tags: [
+*        Tactics
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
+*       204:
+*         description: No tactic found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Tactic not found" }'
 *       401:
 *         description: Unauthorized
 *         content:
@@ -44,6 +133,37 @@ const tacticsRouter = Router();
 *                         summary: An example JSON response
 *                         value: '{ "message": "Unauthorized" }'
 * 
+*   delete:
+*     tags: [
+*        Tactics
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
+*       204:
+*         description: No tactic found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Tactic not found" }'
+*       401:
+*         description: Unauthorized
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Unauthorized" }'
+*
  */
 
 

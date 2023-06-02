@@ -3,20 +3,24 @@ import { Router } from "express";
 const commentRouter = Router();
 /**
 * @openapi
-* /Tactics:
+* /Comments:
 *   get:
 *     tags: [
-*        Tactics
+*        Comments
 *     ]
 *     parameters:
-*       - name: offset
+*       - name: map
 *         in: query
-*         type: integer
-*         description: The number of items to skip before starting to collect the result set.
-*       - name: limit
+*         type: string
+*         description: filter maps.
+*       - name: matchId
 *         in: query
-*         type: integer
-*         description: The maximum numbers of items to return.
+*         type: string
+*         description: filter agents.
+*       - name: valorant_account
+*         in: query
+*         type: string
+*         description: filter valorant_accounts.
 *     responses:
 *       200:
 *         description: OK
@@ -26,15 +30,82 @@ const commentRouter = Router();
 *                     jsonObject:
 *                         summary: An example JSON response
 *                         value: '[
-*                          { "id": 1, "firstName": "Sundar", "lastName": "Pichai", "displayImageUrl": https://thispersondoesnotexist.com/image, "email": sundar.pichai@google.com, "phone": "0800001066", "jobTitle": "CEO", "role": { "id": 1, "description": "Admin" } }, { "id": 2, "firstName": "Matt", "lastName": "Cutts", "displayImageUrl": https://thispersondoesnotexist.com/image, "email": matt.cutts@google.com, "phone": "0800001066", "jobTitle": "Software Dev", "role": { "id": 2, "description": "Sales Rep" } }]'
+*                          { "id": 1, "made_by": "DonBarre", "date": "01-01-2023", "comment": "example"}]'
 *       204:
-*         description: No Content
+*         description: No comment found
 *         content:
 *             application/json:
 *                 examples:
 *                     jsonObject:
 *                         summary: An example JSON response
-*                         value: '{ "message": "No Content" }'
+*                         value: '{ "message": "Comment not found" }'
+*   post:
+*     tags: [
+*        Comments
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "date": "01-01-2023", "comment": "example"}]'
+*       400:
+*         description: Failed
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Failed to create comment" }'
+* /comments/{commentId}:
+*   get:
+*     tags: [
+*        Comments
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "date": "01-01-2023", "comment": "example"}]'
+*       204:
+*         description: No comment found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Comment not found" }'
+*   put:
+*     tags: [
+*        Comments
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
+*       204:
+*         description: No user found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "User not found" }'
 *       401:
 *         description: Unauthorized
 *         content:
@@ -43,8 +114,38 @@ const commentRouter = Router();
 *                     jsonObject:
 *                         summary: An example JSON response
 *                         value: '{ "message": "Unauthorized" }'
-* 
+*   delete:
+*     tags: [
+*        Comments
+*     ]
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '[
+*                          { "id": 1, "made_by": "DonBarre", "map": "split", "agent": "Raze", "tactic": "example tactic"}]'
+*       204:
+*         description: No tactic found
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Tactic not found" }'
+*       401:
+*         description: Unauthorized
+*         content:
+*             application/json:
+*                 examples:
+*                     jsonObject:
+*                         summary: An example JSON response
+*                         value: '{ "message": "Unauthorized" }'
  */
+
 
 commentRouter.route("/").get((req, res) => {
     const {
