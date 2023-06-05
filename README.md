@@ -111,30 +111,38 @@ erDiagram
 ### All the valorant stats come from this [api](https://docs.henrikdev.xyz/valorant.html).
 
 + GET /valorant/v1/account/:name/:tag - Gets all account data
-  
 + GET /valorant/v3/matches/:region/:name/:tag - Gets match history
 
-## Users
+## Accounts
+- GET /accounts/ query strings
+- GET /accounts/{accountId}
+- POST /accounts/
+- PUT /accounts/{accountId}
+- DELETE /accounts/{accountId}
 
-+ GET /users - Returns all users
-+ GET /users/{valorant_account} - Returns the user associated to the Valorant account
-+ POST /users - Creates an user
-+ UPDATE /users/{id} - Updates the data for the selected user
-+ DELETE /users/{id} - Deletes the selected user
-
-## Comments
-
-+ GET /comments?valorant_account=X&map=Y&matchId=Z - Get all comments, can be filtered by match, map or valorant account
-+ GET /comments/{commentId} - Get the complete comment details
-+ POST /comments - Creates a new comment, includes the valorant account, map and match
-+ UPDATE /comments/{commentId} - Update a comment inside the match
-+ DELETE /comments/{commentId} - Deletes a comment inside the match
+## Players
+- GET /accounts/{accountId}/players
+- GET /accounts/{accountId}/players/{playerId}
+- POST  /accounts/{accountId}/players
+- PUT /accounts/{accountId}/players/{playerId}
+- DELETE /accounts/{accountId}/players/{playerId}
 
 ## Tactics
+- GET /tactics/ query string maps or agents
+- GET /tactics/{tacticId}
+- POST /tactics/
+- PUT  /tactics/{tacticId}
+- DELETE  /tactics/{tacticId}
 
-+ GET /tactics?map=x&agent=y&valorant_account=z Get all tactics, can be filtered by map, agent or valorant account
-+ POST /map/{mapId}/tactics/ - Post a new tactic for the specified map
-+ POST /agent/{agentId}/tactics/ - Post a new tactic for the specified agent
-+ UPDATE /tactics/{tactic_id} - Update tactic
-+ DELETE /tactics/{tactic_id} - Delete tactic
+## Matches
+- GET /players/{playerId}/matches - query on maps or agents or date played etc
+- GET /players/{playerId}/matches/{matchId}
+- POST /players/{playerId}/matches
+- PUT  /players/{playerId}/matches/{matchId}
+- DELETE /players/{playerId}/matches/{matchId}
 
+## Comments
+- GET /matches/{matchId}/comments
+- POST /matches/{matchId}/comments
+- PUT /matches/{matchId}/comments/{commentId}
+- DELETE /matches/{matchId}/comments/{commentId}

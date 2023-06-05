@@ -166,7 +166,8 @@ commentRouter.route("/").get((req, res) => {
         res.send("Get comments given the match id " + matchId)
     } else res.send("Get all comments")
     });
-commentRouter.route("/tactics/:commentId").get(
+commentRouter.route("/tactics/:commentId").get((req, res) => { res.send("Get comment details given the id " + req.params.commentId ) });
+commentRouter.route("/").post(
     [
         check('account_comment')
         .trim()
@@ -175,8 +176,7 @@ commentRouter.route("/tactics/:commentId").get(
 
         ],
         validate,
-    (req, res) => { res.send("Get comment details given the id " + req.params.commentId ) });
-commentRouter.route("/").post((req, res) => { res.send("Created comment" )});
+    (req, res) => { res.send("Created comment" )});
 commentRouter.route("/tactics/:commentId").put((req, res) => { res.send("Updated comment with the id " + req.params.commentId )});
 commentRouter.route("/tactics/:commentId").delete((req, res) => { res.send("Deleted comment with the id" + req.params.commentId) });
 

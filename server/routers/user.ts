@@ -193,8 +193,7 @@ userRouter.route("/").post(
     ],
     validate, 
 (req, res) => { res.send("Create User") });
-userRouter.route("/:userId").put((req, res) => { res.send("Update User" + req.params.userId) });
-userRouter.route("/:userId").delete(
+userRouter.route("/:userId").put(
     [
         check('username')
         .trim()
@@ -212,8 +211,21 @@ userRouter.route("/:userId").delete(
         .withMessage("Your password should have at least one number")
         .matches(/[!@#$%^&*(),.?":{}|<>]/)
         .withMessage("Your password should have at least one special character"),
+        check('valorant_account')
+        .trim()
+        .isLength({min: 3})
+        .withMessage('Please enter a valid valorant account must be at least 3 characters'),
+        check('valorant_account')
+        .trim()
+        .isLength({min: 3})
+        .withMessage('Please enter a valid valorant account'),
+        check('valorant_tag')
+        .trim()
+        .isLength({min: 3, max: 4})
+        .withMessage('Please enter a valid valorant tag')
         ],
-        validate,
-    (req, res) => { res.send("Delete User" + req.params.userId) });
+        validate, 
+    (req, res) => { res.send("Update User" + req.params.userId) });
+userRouter.route("/:userId").delete((req, res) => { res.send("Delete User" + req.params.userId) });
 
 export { userRouter };
