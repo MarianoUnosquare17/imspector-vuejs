@@ -188,37 +188,24 @@ tacticsRouter.route("/").get((req, res) => {
     });
     tacticsRouter.route("map/:mapId/tactics").post(
         [
-            check('username')
+            check('tactic')
             .trim()
-            .isLength({min: 3})
-            .withMessage('Username must be at least 3 characters'),
-            check('user_email')
-            .trim()
-            .isLength({min: 3})
-            .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
-            .withMessage('Please enter a valid email address'),
-            check('user_password')
-            .isLength({min: 8, max: 15})
-            .withMessage('Password must be at least 8 characters')
-            .matches(/\d/)
-            .withMessage("Your password should have at least one number")
-            .matches(/[!@#$%^&*(),.?":{}|<>]/)
-            .withMessage("Your password should have at least one special character"),
-            check('valorant_account')
-            .trim()
-            .isLength({min: 3})
-            .withMessage('Please enter a valid valorant account must be at least 3 characters'),
-            check('valorant_account')
-            .trim()
-            .isLength({min: 3})
-            .withMessage('Please enter a valid valorant account'),
-            check('valorant_tag')
-            .trim()
-            .isLength({min: 3, max: 4})
-            .withMessage('Please enter a valid valorant tag')
+            .isLength({max: 120})
+            .withMessage('Tactic must be no longer than 120 characters'),
+
             ],
+            validate,
         (req, res) => { res.send("Created tactic for the following map " + req.params.mapId )});
-    tacticsRouter.route("agents/:agentId/tactics").post((req, res) => { res.send("Created tactic for the following agent " + req.params.agentId )});
+    tacticsRouter.route("agents/:agentId/tactics").post(
+        [
+            check('tactic')
+            .trim()
+            .isLength({max: 120})
+            .withMessage('Tactic must be no longer than 120 characters'),
+
+            ],
+            validate,
+        (req, res) => { res.send("Created tactic for the following agent " + req.params.agentId )});
     tacticsRouter.route("/tactics/:tacticId").put((req, res) => { res.send("Updated tactic with the id " + req.params.tacticId )});
     tacticsRouter.route("/tactics/:tacticId").delete((req, res) => { res.send("Deleted tactic with the id" + req.params.tacticId) });
 

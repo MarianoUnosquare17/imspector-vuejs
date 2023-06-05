@@ -213,6 +213,7 @@ userRouter.route("/:userId").delete(
         .matches(/[!@#$%^&*(),.?":{}|<>]/)
         .withMessage("Your password should have at least one special character"),
         ],
+        validate,
     (req, res) => { res.send("Delete User" + req.params.userId) });
 
 export { userRouter };

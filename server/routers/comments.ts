@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { check } from "express-validator";
+import validate from "../utils/validation";
 
 const commentRouter = Router();
 /**
@@ -164,7 +166,16 @@ commentRouter.route("/").get((req, res) => {
         res.send("Get comments given the match id " + matchId)
     } else res.send("Get all comments")
     });
-commentRouter.route("/tactics/:commentId").get((req, res) => { res.send("Get comment details given the id " + req.params.commentId ) });
+commentRouter.route("/tactics/:commentId").get(
+    [
+        check('account_comment')
+        .trim()
+        .isLength({max: 120})
+        .withMessage('Comment must be no longer than 120 characters'),
+
+        ],
+        validate,
+    (req, res) => { res.send("Get comment details given the id " + req.params.commentId ) });
 commentRouter.route("/").post((req, res) => { res.send("Created comment" )});
 commentRouter.route("/tactics/:commentId").put((req, res) => { res.send("Updated comment with the id " + req.params.commentId )});
 commentRouter.route("/tactics/:commentId").delete((req, res) => { res.send("Deleted comment with the id" + req.params.commentId) });
