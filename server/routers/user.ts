@@ -1,5 +1,6 @@
 import { Router } from "express";
-
+import { check } from "express-validator";
+import validate from "../utils/validation";
 /**
 * @openapi
 * /Users:
@@ -159,8 +160,59 @@ import { Router } from "express";
 const userRouter = Router();
 userRouter.route("/").get((req, res) => { res.send("Get all users") });
 userRouter.route("/:userId").get((req, res) => { res.send("Get Single User" + req.params.userId) });
-userRouter.route("/").post((req, res) => { res.send("Create User") });
+userRouter.route("/").post(
+    [
+    check('username')
+    .trim()
+    .isLength({min: 3})
+    .withMessage('Username must be at least 3 characters'),
+    check('user_email')
+    .trim()
+    .isLength({min: 3})
+    .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+    .withMessage('Please enter a valid email address'),
+    check('user_password')
+    .isLength({min: 8, max: 15})
+    .withMessage('Password must be at least 8 characters')
+    .matches(/\d/)
+    .withMessage("Your password should have at least one number")
+    .matches(/[!@#$%^&*(),.?":{}|<>]/)
+    .withMessage("Your password should have at least one special character"),
+    check('valorant_account')
+    .trim()
+    .isLength({min: 3})
+    .withMessage('Please enter a valid valorant account must be at least 3 characters'),
+    check('valorant_account')
+    .trim()
+    .isLength({min: 3})
+    .withMessage('Please enter a valid valorant account'),
+    check('valorant_tag')
+    .trim()
+    .isLength({min: 3, max: 4})
+    .withMessage('Please enter a valid valorant tag')
+    ],
+    validate, 
+(req, res) => { res.send("Create User") });
 userRouter.route("/:userId").put((req, res) => { res.send("Update User" + req.params.userId) });
-userRouter.route("/:userId").delete((req, res) => { res.send("Delete User" + req.params.userId) });
+userRouter.route("/:userId").delete(
+    [
+        check('username')
+        .trim()
+        .isLength({min: 3})
+        .withMessage('Username must be at least 3 characters'),
+        check('user_email')
+        .trim()
+        .isLength({min: 3})
+        .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+        .withMessage('Please enter a valid email address'),
+        check('user_password')
+        .isLength({min: 8, max: 15})
+        .withMessage('Password must be at least 8 characters')
+        .matches(/\d/)
+        .withMessage("Your password should have at least one number")
+        .matches(/[!@#$%^&*(),.?":{}|<>]/)
+        .withMessage("Your password should have at least one special character"),
+        ],
+    (req, res) => { res.send("Delete User" + req.params.userId) });
 
 export { userRouter };
