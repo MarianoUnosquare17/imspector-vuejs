@@ -1,9 +1,11 @@
 import express, { Request, Response } from "express";
-import { userRouter } from "./routers/user";
+import { accountsRouter } from "./routers/accounts";
 import { commentRouter } from "./routers/comments";
 import { tacticsRouter } from "./routers/tactics";
+import { matchesRouter } from "./routers/matches";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import { playersRouter } from "./routers/players";
 
 const swaggerDefinition = {
     openapi: "3.0.0",
@@ -34,9 +36,11 @@ const port = 3001;
   );
 
   
-app.use('/users', userRouter)
+app.use('/accounts', accountsRouter)
 app.use('/comments', commentRouter)
 app.use('/tactics', tacticsRouter)
+app.use('/matches', matchesRouter)
+app.use('/players', playersRouter)
   
   app.listen(port, () => console.log(`Application started on port: ${port}`));
 

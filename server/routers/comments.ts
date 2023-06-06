@@ -166,8 +166,8 @@ commentRouter.route("/").get((req, res) => {
         res.send("Get comments given the match id " + matchId)
     } else res.send("Get all comments")
     });
-commentRouter.route("/tactics/:commentId").get((req, res) => { res.send("Get comment details given the id " + req.params.commentId ) });
-commentRouter.route("/").post(
+commentRouter.route("/matches/:matchId/comments").get((req, res) => { res.send("Get comment details given the id " + req.params.matchId ) });
+commentRouter.route("/matches/:matchId/comments").post(
     [
         check('account_comment')
         .trim()
@@ -177,7 +177,7 @@ commentRouter.route("/").post(
         ],
         validate,
     (req, res) => { res.send("Created comment" )});
-commentRouter.route("/tactics/:commentId").put((req, res) => { res.send("Updated comment with the id " + req.params.commentId )});
-commentRouter.route("/tactics/:commentId").delete((req, res) => { res.send("Deleted comment with the id" + req.params.commentId) });
+commentRouter.route("/matches/:matchId/comments/:commentId").put((req, res) => { res.send("Updated comment with the match id " + req.params.matchId  + 'and comment id' + req.params.commentId)});
+commentRouter.route("/matches/:matchId/comments/:commentId").delete((req, res) => { res.send("Deleted comment with the match id" + req.params.matchId  + 'and comment id' + req.params.commentId) });
 
 export { commentRouter };
