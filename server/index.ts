@@ -3,9 +3,10 @@ import { accountsRouter } from "./routers/accounts";
 import { commentRouter } from "./routers/comments";
 import { tacticsRouter } from "./routers/tactics";
 import { matchesRouter } from "./routers/matches";
+import { playersRouter } from "./routers/players";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-import { playersRouter } from "./routers/players";
+
 
 const swaggerDefinition = {
     openapi: "3.0.0",

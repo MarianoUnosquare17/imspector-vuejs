@@ -1,73 +1,72 @@
 CREATE TABLE IF NOT EXISTS public.accounts
 (
-    account_id serial constraint id_account_pk primary key,
-    username varchar not null,
-    email varchar not null,
-    password varchar not null
+    account_id serial constraint accounts_pk primary key,
+    username text,
+    email text,
+    password text
 );
 
 
 CREATE TABLE IF NOT EXISTS public.players
 (
-    player_id serial constraint id_players_pk primary key,
-    valorant_account varchar not null,
-    valorant_tag varchar not null,
-    level int not null,
-    region varchar not null
-);
-
-CREATE TABLE IF NOT EXISTS public.tactics
-(
-    tactic_id serial constraint id_tactic_pk primary key,
-    created_by varchar not null,
-    map_id varchar not null,
-    agent_id varchar not null,
-    tactic varchar not null
+    player_id serial constraint players_pk primary key,
+    valorant_account text,
+    valorant_tag text,
+    region text,
+    level int,
+    account_id int constraint players_accounts_account_id references public.accounts
 );
 
 CREATE TABLE IF NOT EXISTS public.maps
 (
-    map_id serial constraint id_map_pk primary key,
-    name varchar not null
+    map_id serial constraint maps_pk primary key,
+    name text
 );
 
 CREATE TABLE IF NOT EXISTS public.agents
 (
-    agent_id serial constraint id_agent_pk primary key,
-    name varchar not null
+    agent_id serial constraint agents_pk primary key,
+    name text
 );
 
-CREATE TABLE IF NOT EXISTS public.modes
+CREATE TABLE IF NOT EXISTS public.player_match_modes
 (
-    mode_id serial constraint id_mode_pk primary key,
-    name varchar not null
+    player_match_mode_id serial constraint modes_pk primary key,
+    name text
 );
 
-CREATE TABLE IF NOT EXISTS public.comments
+CREATE TABLE IF NOT EXISTS public.tactics
 (
-    comment_id serial constraint id_game_comment_pk primary key,
-    comment varchar not null,
-    player_match_id int not null,
-    date_created date not null,
-    created_by varchar not null
+    tactic_id serial constraint tactics_pk primary key,
+    tactic text,
+    map_id int constraint tactics_maps_map_id references public.maps,
+    agent_id int constraint tactics_agents_agent_id references public.agents,
+    created_by int constraint tactics_accounts_account_id references public.accounts
 );
-
 
 CREATE TABLE IF NOT EXISTS public.player_matches
 (
-    match_id serial constraint id_acc_match_pk primary key,
-    score int not null,
-    date_played date not null,
-    kills int not null,
-    deaths int not null,
-    assists int not null,
-    money_spent int not null,
-    bodyshots int not null,
-    headshots int not null,
-    legshots int not null,
-    agent_id int not null,
-    map_id int not null,
-    player_id int not null,
-    player_match_mode_id int not null
+    player_match_id serial constraint player_matches_pk primary key,
+    score int,
+    date_played timestamp,
+    kills int,
+    deaths int,
+    assists int,
+    money_spent int,
+    bodyshots int,
+    headshots int,
+    legshots int,
+    map_id int constraint player_matches_maps_map_id references public.maps,
+    agent_id int constraint player_matches_agents_agent_id references public.agents,
+    player_id int constraint player_matches_players_player_id references public.players,
+    player_match_mode_id int constraint player_matches_player_match_modes_player_match_mode_id references public.player_match_modes
 );
 
+CREATE TABLE IF NOT EXISTS public.player_match_comments
+(
+    comment_id serial constraint comments_pk primary key,
+    comment text,
+    date_created timestamp,
+    player_match_id int constraint player_match_comments_player_matches_player_match_id references public.player_matches,
+    created_by int constraint player_match_comments_accounts_account_id references public.accounts
+);

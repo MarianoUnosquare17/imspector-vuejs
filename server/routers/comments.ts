@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
+import { PrismaClient } from "@prisma/client";
 
 const commentRouter = Router();
+const prisma = new PrismaClient()
 /**
 * @openapi
 * /Comments:
@@ -166,7 +168,18 @@ commentRouter.route("/").get((req, res) => {
         res.send("Get comments given the match id " + matchId)
     } else res.send("Get all comments")
     });
-commentRouter.route("/matches/:matchId/comments").get((req, res) => { res.send("Get comment details given the id " + req.params.matchId ) });
+commentRouter.route("/matches/:matchId/comments").get(async(req, res) => {
+    const comment = await prisma.comments.findUnique({
+        where:{
+            id: req.params.matchId
+        }
+    })
+    if(comment){
+        return res.status(200).json(comment)
+    } else {
+        res.status(400)
+    }
+});
 commentRouter.route("/matches/:matchId/comments").post(
     [
         check('account_comment')

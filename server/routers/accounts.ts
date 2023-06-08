@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
+import { PrismaClient } from "@prisma/client";
 /**
 * @openapi
 * /Users:
@@ -158,50 +159,94 @@ import validate from "../utils/validation";
 
 
 const accountsRouter = Router();
-accountsRouter.route("/").get((req, res) => { res.send("Get all users") });
-accountsRouter.route("/:accountId").get((req, res) => { res.send("Get Single User" + req.params.accountId) });
+const prisma = new PrismaClient()
+
+accountsRouter.route("/").get(async (req, res) => {
+    const accounts = await prisma.accounts.findMany({})
+    return res.status(200).json(accounts)
+});
+accountsRouter.route("/:accountId").get(async (req, res) => {
+    const account = await prisma.accounts.findUnique({
+        where:{
+            id: req.params.accountId
+        }
+    })
+    if(account){
+        return res.status(200).json(account)
+    } else {
+        res.status(400)
+    }
+});
 accountsRouter.route("/").post(
     [
-    check('username')
-    .trim()
-    .isLength({min: 3})
-    .withMessage('Username must be at least 3 characters'),
-    check('email')
-    .trim()
-    .isLength({min: 3})
-    .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
-    .withMessage('Please enter a valid email address'),
-    check('password')
-    .isLength({min: 8, max: 15})
-    .withMessage('Password must be at least 8 characters')
-    .matches(/\d/)
-    .withMessage("Your password should have at least one number")
-    .matches(/[!@#$%^&*(),.?":{}|<>]/)
-    .withMessage("Your password should have at least one special character"),
+        check('username')
+            .trim()
+            .isLength({ min: 3 })
+            .withMessage('Username must be at least 3 characters'),
+        check('email')
+            .trim()
+            .isLength({ min: 3 })
+            .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+            .withMessage('Please enter a valid email address'),
+        check('password')
+            .isLength({ min: 8, max: 15 })
+            .withMessage('Password must be at least 8 characters')
+            .matches(/\d/)
+            .withMessage("Your password should have at least one number")
+            .matches(/[!@#$%^&*(),.?":{}|<>]/)
+            .withMessage("Your password should have at least one special character"),
     ],
-    validate, 
-(req, res) => { res.send("Create User") });
+    validate,
+    (req, res) => {
+        const {username, email, password} = req.body
+        prisma.accounts.create({
+            data:{
+                username,
+                email,
+                password
+            }
+        })
+
+        res.status(201)
+    });
 accountsRouter.route("/:userId").put(
     [
         check('username')
-        .trim()
-        .isLength({min: 3})
-        .withMessage('Username must be at least 3 characters'),
+            .trim()
+            .isLength({ min: 3 })
+            .withMessage('Username must be at least 3 characters'),
         check('user_email')
-        .trim()
-        .isLength({min: 3})
-        .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
-        .withMessage('Please enter a valid email address'),
+            .trim()
+            .isLength({ min: 3 })
+            .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+            .withMessage('Please enter a valid email address'),
         check('user_password')
-        .isLength({min: 8, max: 15})
-        .withMessage('Password must be at least 8 characters')
-        .matches(/\d/)
-        .withMessage("Your password should have at least one number")
-        .matches(/[!@#$%^&*(),.?":{}|<>]/)
-        .withMessage("Your password should have at least one special character"),
-        ],
-        validate, 
-    (req, res) => { res.send("Update User" + req.params.userId) });
-accountsRouter.route("/:userId").delete((req, res) => { res.send("Delete User" + req.params.userId) });
+            .isLength({ min: 8, max: 15 })
+            .withMessage('Password must be at least 8 characters')
+            .matches(/\d/)
+            .withMessage("Your password should have at least one number")
+            .matches(/[!@#$%^&*(),.?":{}|<>]/)
+            .withMessage("Your password should have at least one special character"),
+    ],
+    validate,
+    async(req, res) => {
+        const {username, email, password} = req.body
+        const {userId} = req.params
+       await prisma.accounts.create({
+            where:{
+                id: parseInt(userId)
+            },
+            data:{
+                username,
+                email,
+                password
+            }
+        })
+
+        res.status(204)
+    });
+accountsRouter.route("/:userId").delete(async (req, res) => {
+    
+});
 
 export { accountsRouter };
