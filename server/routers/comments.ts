@@ -152,6 +152,7 @@ const prisma = new PrismaClient()
 
 
 commentRouter.route("/").get((req, res) => {
+    //Doubt how do i work with query params
     const {
         valorant_account,
         map,
@@ -168,19 +169,21 @@ commentRouter.route("/").get((req, res) => {
         res.send("Get comments given the match id " + matchId)
     } else res.send("Get all comments")
     });
-commentRouter.route("/matches/:matchId/comments").get(async(req, res) => {
-    const comment = await prisma.comments.findUnique({
-        where:{
-            id: req.params.matchId
-        }
-    })
-    if(comment){
-        return res.status(200).json(comment)
-    } else {
-        res.status(400)
-    }
-});
-commentRouter.route("/matches/:matchId/comments").post(
+ commentRouter.route("/matches/:matchId").get(async(req, res) => {
+     const comments = await prisma.player_match_comments.findMany({
+         where:{
+             player_matches: {
+                player_match_id: parseInt(req.params.matchId)
+             }
+         }
+     })
+     if(comments){
+         return res.status(200).json(comments)
+     } else {
+         res.status(400)
+     }
+ });
+commentRouter.route("/matches/:matchId").post(
     [
         check('account_comment')
         .trim()

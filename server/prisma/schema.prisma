@@ -7,42 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model account_game {
-  id                Int      @id(map: "id_acc_games_pk") @default(autoincrement())
-  map               String   @db.VarChar
-  mode              String   @db.VarChar
-  agent             String   @db.VarChar
-  date_played       DateTime @db.Date
-  score             Int
-  money_spent_game  Int
-  money_spent_round Int
-  kills             Int
-  deaths            Int
-  assists           Int
-  bodyshots         Int
-  headshots         Int
-  legshots          Int
-}
-
 model accounts {
-  account_id            Int                     @id(map: "id_account_pk") @default(autoincrement())
-  username              String                  @db.VarChar
-  email                 String                  @db.VarChar
-  password              String                  @db.VarChar
+  account_id            Int                     @id(map: "accounts_pk") @default(autoincrement())
+  username              String?
+  email                 String?
+  password              String?
   player_match_comments player_match_comments[]
+  players               players[]
+  tactics               tactics[]
 }
 
 model agents {
-  agent_id Int    @id(map: "id_agent_pk") @default(autoincrement())
-  name     String @db.VarChar
-}
-
-model comments {
-  comment_id      Int      @id(map: "id_game_comment_pk") @default(autoincrement())
-  comment         String   @db.VarChar
-  player_match_id Int
-  date_created    DateTime @db.Date
-  created_by      String   @db.VarChar
+  agent_id       Int              @id(map: "agents_pk") @default(autoincrement())
+  name           String?
+  player_matches player_matches[]
+  tactics        tactics[]
 }
 
 model flyway_schema_history {
@@ -61,103 +40,68 @@ model flyway_schema_history {
 }
 
 model maps {
-  map_id Int    @id(map: "id_map_pk") @default(autoincrement())
-  name   String @db.VarChar
-}
-
-model match_history {
-  id          Int      @id(map: "id_match_pk") @default(autoincrement())
-  score       Int
-  date_played DateTime @db.Date
-  map         String   @db.VarChar
-  kills       Int
-  deaths      Int
-  assists     Int
-  mode        String   @db.VarChar
-}
-
-model modes {
-  mode_id Int    @id(map: "id_mode_pk") @default(autoincrement())
-  name    String @db.VarChar
+  map_id         Int              @id(map: "maps_pk") @default(autoincrement())
+  name           String?
+  player_matches player_matches[]
+  tactics        tactics[]
 }
 
 model player_match_comments {
-  id              Int             @id(map: "comments_pk") @default(autoincrement())
+  comment_id      Int             @id(map: "comments_pk") @default(autoincrement())
   comment         String?
   date_created    DateTime?       @db.Timestamp(6)
   player_match_id Int?
   created_by      Int?
   accounts        accounts?       @relation(fields: [created_by], references: [account_id], onDelete: NoAction, onUpdate: NoAction, map: "player_match_comments_accounts_account_id")
-  player_matches  player_matches? @relation(fields: [player_match_id], references: [match_id], onDelete: NoAction, onUpdate: NoAction, map: "player_match_comments_player_matches_player_match_id")
+  player_matches  player_matches? @relation(fields: [player_match_id], references: [player_match_id], onDelete: NoAction, onUpdate: NoAction, map: "player_match_comments_player_matches_player_match_id")
 }
 
 model player_match_modes {
-  id   Int     @id(map: "modes_pk") @default(autoincrement())
-  name String?
+  player_match_mode_id Int              @id(map: "modes_pk") @default(autoincrement())
+  name                 String?
+  player_matches       player_matches[]
 }
 
 model player_matches {
-  match_id              Int                     @id(map: "id_acc_match_pk") @default(autoincrement())
-  score                 Int
-  date_played           DateTime                @db.Date
-  kills                 Int
-  deaths                Int
-  assists               Int
-  money_spent           Int
-  bodyshots             Int
-  headshots             Int
-  legshots              Int
-  agent_id              Int
-  map_id                Int
-  player_id             Int
-  player_match_mode_id  Int
+  player_match_id       Int                     @id(map: "player_matches_pk") @default(autoincrement())
+  score                 Int?
+  date_played           DateTime?               @db.Timestamp(6)
+  kills                 Int?
+  deaths                Int?
+  assists               Int?
+  money_spent           Int?
+  bodyshots             Int?
+  headshots             Int?
+  legshots              Int?
+  map_id                Int?
+  agent_id              Int?
+  player_id             Int?
+  player_match_mode_id  Int?
   player_match_comments player_match_comments[]
-}
-
-model player_stats {
-  id               Int    @id(map: "id_player_pk") @default(autoincrement())
-  valorant_account String @db.VarChar
-  valorant_tag     String @db.VarChar
-  level            Int
-  region           String @db.VarChar
-  player_card      String @db.VarChar
+  agents                agents?                 @relation(fields: [agent_id], references: [agent_id], onDelete: NoAction, onUpdate: NoAction, map: "player_matches_agents_agent_id")
+  maps                  maps?                   @relation(fields: [map_id], references: [map_id], onDelete: NoAction, onUpdate: NoAction, map: "player_matches_maps_map_id")
+  player_match_modes    player_match_modes?     @relation(fields: [player_match_mode_id], references: [player_match_mode_id], onDelete: NoAction, onUpdate: NoAction, map: "player_matches_player_match_modes_player_match_mode_id")
+  players               players?                @relation(fields: [player_id], references: [player_id], onDelete: NoAction, onUpdate: NoAction, map: "player_matches_players_player_id")
 }
 
 model players {
-  player_id        Int    @id(map: "id_players_pk") @default(autoincrement())
-  valorant_account String @db.VarChar
-  valorant_tag     String @db.VarChar
-  level            Int
-  region           String @db.VarChar
+  player_id        Int              @id(map: "players_pk") @default(autoincrement())
+  valorant_account String?
+  valorant_tag     String?
+  region           String?
+  level            Int?
+  account_id       Int?
+  player_matches   player_matches[]
+  accounts         accounts?        @relation(fields: [account_id], references: [account_id], onDelete: NoAction, onUpdate: NoAction, map: "players_accounts_account_id")
 }
 
 model tactics {
-  id      Int    @id(map: "id_tactics_pk") @default(autoincrement())
-  made_by String @db.VarChar
-  map     String @db.VarChar
-  agent   String @db.VarChar
-  tactic  String @db.VarChar
-}
-
-model user_account {
-  id               Int    @id(map: "id_pk") @default(autoincrement())
-  username         String @db.VarChar
-  user_email       String @db.VarChar
-  user_password    String @db.VarChar
-  valorant_account String @db.VarChar
-  valorant_tag     String @db.VarChar
-}
-
-model user_account_comments {
-  id              Int      @id(map: "id_acc_comment_pk") @default(autoincrement())
-  date_created    DateTime @db.Date
-  made_by         String   @db.VarChar
-  account_comment String   @db.VarChar
-}
-
-model user_game_comments {
-  id              Int      @id(map: "id_game_comments_pk") @default(autoincrement())
-  date_created    DateTime @db.Date
-  made_by         String   @db.VarChar
-  account_comment String   @db.VarChar
+  tactic_id  Int       @id(map: "tactics_pk") @default(autoincrement())
+  tactic     String?
+  map_id     Int?
+  agent_id   Int?
+  created_by Int?
+  accounts   accounts? @relation(fields: [created_by], references: [account_id], onDelete: NoAction, onUpdate: NoAction, map: "tactics_accounts_account_id")
+  agents     agents?   @relation(fields: [agent_id], references: [agent_id], onDelete: NoAction, onUpdate: NoAction, map: "tactics_agents_agent_id")
+  maps       maps?     @relation(fields: [map_id], references: [map_id], onDelete: NoAction, onUpdate: NoAction, map: "tactics_maps_map_id")
 }

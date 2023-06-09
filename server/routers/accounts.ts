@@ -167,11 +167,11 @@ accountsRouter.route("/").get(async (req, res) => {
 });
 accountsRouter.route("/:accountId").get(async (req, res) => {
     const account = await prisma.accounts.findUnique({
-        where:{
-            id: req.params.accountId
+        where: {
+            account_id: parseInt(req.params.accountId)
         }
     })
-    if(account){
+    if (account) {
         return res.status(200).json(account)
     } else {
         res.status(400)
@@ -197,56 +197,39 @@ accountsRouter.route("/").post(
             .withMessage("Your password should have at least one special character"),
     ],
     validate,
-    (req, res) => {
-        const {username, email, password} = req.body
-        prisma.accounts.create({
-            data:{
-                username,
-                email,
-                password
-            }
-        })
-
-        res.status(201)
+    async (req, res) => {
+            const { username, email, password } = req.body
+            await prisma.accounts.create({
+                data: {
+                    username,
+                    email,
+                    password
+                }
+            })
+            res.sendStatus(200)
     });
 accountsRouter.route("/:userId").put(
-    [
-        check('username')
-            .trim()
-            .isLength({ min: 3 })
-            .withMessage('Username must be at least 3 characters'),
-        check('user_email')
-            .trim()
-            .isLength({ min: 3 })
-            .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
-            .withMessage('Please enter a valid email address'),
-        check('user_password')
-            .isLength({ min: 8, max: 15 })
-            .withMessage('Password must be at least 8 characters')
-            .matches(/\d/)
-            .withMessage("Your password should have at least one number")
-            .matches(/[!@#$%^&*(),.?":{}|<>]/)
-            .withMessage("Your password should have at least one special character"),
-    ],
-    validate,
-    async(req, res) => {
-        const {username, email, password} = req.body
-        const {userId} = req.params
-       await prisma.accounts.create({
-            where:{
-                id: parseInt(userId)
+    async (req, res) => {
+        const { username, email, password } = req.body
+        await prisma.accounts.update({
+            where: {
+                account_id: parseInt(req.params.userId)
             },
-            data:{
+            data: {
                 username,
                 email,
                 password
-            }
+            },
         })
-
-        res.status(204)
+        res.sendStatus(203)
     });
 accountsRouter.route("/:userId").delete(async (req, res) => {
-    
+    await prisma.accounts.delete({
+        where: {
+            account_id: parseInt(req.params.userId)
+        },
+    })
+    res.sendStatus(200)
 });
 
 export { accountsRouter };

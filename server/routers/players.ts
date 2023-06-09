@@ -1,13 +1,36 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
+import { PrismaClient } from "@prisma/client";
 
-
+const prisma = new PrismaClient()
 
 const playersRouter = Router();
-playersRouter.route("/accounts/:accountId/players").get((req, res) => { res.send("Get player linked to account Id" + req.params.accountId) });
-playersRouter.route("/accounts/:accountId/players/:playerId").get((req, res) => { res.send("Get Single player with player id" + req.params.playerId) });
-playersRouter.route("/accounts/:accountId/players").post(
+playersRouter.route("/accounts/:accountId/players").get(async(req, res) => {
+    const player = await prisma.players.findUnique({
+        where:{
+            player_id: parseInt(req.params.accountId)
+        }
+    })
+    if(player){
+        return res.status(200).json(player)
+    } else {
+        res.status(400)
+    }
+});
+playersRouter.route("/:playerId").get(async(req, res) => {
+    const player = await prisma.players.findUnique({
+        where:{
+            player_id: parseInt(req.params.playerId)
+        }
+    })
+    if(player){
+        return res.status(200).json(player)
+    } else {
+        res.status(400)
+    }
+});
+playersRouter.route(":accountId/players").post(
     [
     check('valorant_account')
     .trim()

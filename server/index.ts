@@ -35,6 +35,7 @@ const port = 3001;
   app.use("/swagger.json", (req: Request, res: Response) =>
     res.json(openapiSpecification).status(200)
   );
+  app.use(express.json()); 
 
   
 app.use('/accounts', accountsRouter)
@@ -43,5 +44,5 @@ app.use('/tactics', tacticsRouter)
 app.use('/matches', matchesRouter)
 app.use('/players', playersRouter)
   
-  app.listen(port, () => console.log(`Application started on port: ${port}`));
+app.listen(port, () => console.log(`Application started on port: ${port}`));
 
