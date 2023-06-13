@@ -13,9 +13,9 @@ playersRouter.route("/accounts/:accountId/players").get(async(req, res) => {
         }
     })
     if(player){
-        return res.status(200).json(player)
+        return res.sendStatus(200).json(player)
     } else {
-        res.status(400)
+        res.sendStatus(400)
     }
 });
 playersRouter.route("/:playerId").get(async(req, res) => {
@@ -30,7 +30,7 @@ playersRouter.route("/:playerId").get(async(req, res) => {
         res.status(400)
     }
 });
-playersRouter.route(":accountId/players").post(
+playersRouter.route("/:accountId").post(
     [
     check('valorant_account')
     .trim()
@@ -42,8 +42,23 @@ playersRouter.route(":accountId/players").post(
     .withMessage('Please enter a valid Tag'),
     ],
     validate, 
-(req, res) => { res.send(" Player created") });
-playersRouter.route("/accounts/:accountId/players/:playerId").put(
+    async (req, res) => {
+        const { player_id, valorant_account, valorant_tag, region, level, account_id} = req.body
+        await prisma.players.create({
+            where:{
+                account_id: parseInt(req.params.accountId)
+            },
+            data: {
+                player_id,
+                valorant_account,
+                valorant_tag,
+                region,
+                level
+            }
+        })
+        res.sendStatus(200)
+});
+playersRouter.route("/accounts/:accountId").put(
     [
         check('valorant_account')
         .trim()
@@ -55,7 +70,35 @@ playersRouter.route("/accounts/:accountId/players/:playerId").put(
         .withMessage('Please enter a valid Tag'),
         ],
         validate, 
-    (req, res) => { res.send("Update User" + req.params.userId) });
-playersRouter.route("/accounts/:accountId/players/:playerId").delete((req, res) => { res.send("Deleted User" + req.params.playerId) });
+    async (req, res) => { 
+        const { player_id, valorant_account, valorant_tag, region, level, account_id} = req.body
+        await prisma.players.update({
+        where:{
+            account_id: parseInt(req.params.accountId)
+        },
+        data: {
+            valorant_account,
+            valorant_tag,
+            region,
+            level
+        }
+    })
+    res.sendStatus(200)});
+playersRouter.route("/accounts/:accountId").delete((req, res) => {
+    async (req, res) => { 
+        const { player_id, valorant_account, valorant_tag, region, level, account_id} = req.body
+        await prisma.players.delete({
+        where:{
+            account_id: parseInt(req.params.accountId)
+        },
+        data: {
+            valorant_account,
+            valorant_tag,
+            region,
+            level
+        }
+    })
+    res.sendStatus(200)}
+});
 
 export { playersRouter };

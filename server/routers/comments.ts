@@ -192,8 +192,41 @@ commentRouter.route("/matches/:matchId").post(
 
         ],
         validate,
-    (req, res) => { res.send("Created comment" )});
-commentRouter.route("/matches/:matchId/comments/:commentId").put((req, res) => { res.send("Updated comment with the match id " + req.params.matchId  + 'and comment id' + req.params.commentId)});
-commentRouter.route("/matches/:matchId/comments/:commentId").delete((req, res) => { res.send("Deleted comment with the match id" + req.params.matchId  + 'and comment id' + req.params.commentId) });
+    async (req, res) => {
+        const { comment } = req.body
+        await prisma.player_match_comments.create({
+            where:{
+                player_match_id: parseInt(req.params.matchId)
+            },
+            data: {
+                comment
+            }
+        })
+        res.sendStatus(200)
+    });
+commentRouter.route("/matches/:commentId").put( async(req, res) => {
+    const { comment } = req.body
+    await prisma.player_match_comments.update({
+        where:{
+            player_match_id: parseInt(req.params.commentId)
+        },
+        data: {
+            comment
+        }
+    })
+    res.sendStatus(200)
+});
+commentRouter.route("/matches/:commentId").delete(async(req, res) => {
+    const { comment } = req.body
+    await prisma.player_match_comments.delete({
+        where:{
+            player_match_id: parseInt(req.params.matchId)
+        },
+        data: {
+            comment
+        }
+    })
+    res.sendStatus(200)
+});
 
 export { commentRouter };

@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
+import { PrismaClient } from "@prisma/client";
 const tacticsRouter = Router();
+const prisma = new PrismaClient()
 
 /**
 * @openapi
@@ -169,17 +171,20 @@ const tacticsRouter = Router();
  */
 
 
-tacticsRouter.route("/").get((req, res) => {
+tacticsRouter.route("/").get( async(req, res) => {
     const {
         map,
         agent,
     } = req.query
+    const config = {where:{}}
 
     if(map){
-        res.send("Get tactics given the map  " + map)
+        config.where.map = map
     } else if(agent){
-        res.send("Get tactics given the agent " + agent)
-    } else res.send("Get all tactics")
+        config.where.agent = agent
+    } else res.send("Couldnt get tactic")
+
+    await prisma.tactics.findMany(config)
     });
     
     tacticsRouter.route('/').post(
@@ -191,10 +196,40 @@ tacticsRouter.route("/").get((req, res) => {
 
             ],
             validate,
-        (req, res) => { res.send("Created tactic" )});
+        async (req, res) => {
+            const { tactic, map_id, agent_id, created_by } = req.body
+            await prisma.tactics.create({
+                data: {
+                    tactic,
+                    map_id,
+                    agent_id,
+                    created_by
+                }
+            })
+            res.sendStatus(200)
+        });
 
-    tacticsRouter.route("/:tacticId").get((req, res) => { res.send("Get tactic for the following id " + req.params.tacticId )});
-    tacticsRouter.route("/:tacticId").put((req, res) => { res.send("Updated tactic with the id " + req.params.tacticId )});
+    tacticsRouter.route("/:tacticId").get(async(req, res) => {
+        await prisma.tactics.findUnique({
+            where:{
+                tactic_id: parseInt(req.params.tacticId)
+            }
+        })
+        res.sendStatus(200)
+    });
+    tacticsRouter.route("/:tacticId").put(async(req, res) => {
+        const { tactic, map_id, agent_id, created_by } = req.body
+        await prisma.tactics.create({
+            data: {
+                tactic,
+                map_id,
+                agent_id,
+                created_by
+            }
+        })
+        res.sendStatus(200)
+    });
+
     tacticsRouter.route("/:tacticId").delete((req, res) => { res.send("Deleted tactic with the id" + req.params.tacticId) });
 
 
