@@ -219,7 +219,10 @@ tacticsRouter.route("/").get( async(req, res) => {
     });
     tacticsRouter.route("/:tacticId").put(async(req, res) => {
         const { tactic, map_id, agent_id, created_by } = req.body
-        await prisma.tactics.create({
+        await prisma.tactics.update({
+            where:{
+                tactic_id: parseInt(req.params.tacticId)
+            },
             data: {
                 tactic,
                 map_id,
@@ -230,7 +233,21 @@ tacticsRouter.route("/").get( async(req, res) => {
         res.sendStatus(200)
     });
 
-    tacticsRouter.route("/:tacticId").delete((req, res) => { res.send("Deleted tactic with the id" + req.params.tacticId) });
+    tacticsRouter.route("/:tacticId").delete(async(req, res) => {
+        const { tactic, map_id, agent_id, created_by } = req.body
+        await prisma.tactics.update({
+            where:{
+                tactic_id: parseInt(req.params.tacticId)
+            },
+            data: {
+                tactic,
+                map_id,
+                agent_id,
+                created_by
+            }
+        })
+        res.sendStatus(200)
+    });
 
 
 export { tacticsRouter };

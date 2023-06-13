@@ -21,6 +21,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "@types/cors": "^2.8.13",
+    "cors": "^2.8.5"
   }
 }
