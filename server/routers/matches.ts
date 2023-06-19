@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 const matchesRouter = Router();
@@ -13,14 +13,14 @@ matchesRouter.route("/matches").get(async (req, res) => {
         agent,
         player_id
     } = req.query
-    const config = { where: {} }
+    const config: Prisma.player_matchesFindManyArgs = { where: {} }
 
     if (map) {
-        config.where.map = map
+        config.where.map_id = parseInt(map as string)
     } else if (agent) {
-        config.where.agent = agent
+        config.where.agent_id = parseInt(agent as string)
     } else if (player_id) {
-        config.where.player_id = player_id
+        config.where.player_id = parseInt(player_id as string)
     } else res.send("Couldnt get match")
 
     await prisma.player_matches.findMany(config)
@@ -53,9 +53,6 @@ matchesRouter.route("/:playerId").post(
             player_id,
             player_match_mode_id } = req.body
         await prisma.player_matches.create({
-            where: {
-                player_match_id: parseInt(req.params.player_id)
-            },
             data: {
                 score,
                 date_played,
@@ -69,7 +66,8 @@ matchesRouter.route("/:playerId").post(
                 map_id,
                 agent_id,
                 player_id,
-                player_match_mode_id
+                player_match_mode_id,
+                player_match_id: parseInt(req.params.playerId)
             }
         })
         res.sendStatus(200)
@@ -90,7 +88,7 @@ matchesRouter.route("/:playerId").put(async (req, res) => {
         player_match_mode_id } = req.body
     await prisma.player_matches.update({
         where: {
-            player_match_id: parseInt(req.params.player_id)
+            player_match_id: parseInt(req.params.playerId)
         },
         data: {
             score,
@@ -112,23 +110,10 @@ matchesRouter.route("/:playerId").put(async (req, res) => {
 });
 
 matchesRouter.route("/:playerId").delete(async(req, res) => {
-    const { score,
-        date_played,
-        kills,
-        deaths,
-        assists,
-        money_spent,
-        bodyshots,
-        headshots,
-        legshots,
-        map_id,
-        agent_id,
-        player_id,
-        player_match_mode_id } = req.body
-    await prisma.player_matches.delete({
+    await prisma.player_matches.deleteMany({
         where: {
-            player_match_id: parseInt(req.params.player_id)
-        },
+            player_match_id: parseInt(req.params.playerId)
+        }
     })
     res.sendStatus(200)
 });

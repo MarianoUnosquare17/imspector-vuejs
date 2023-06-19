@@ -45,15 +45,13 @@ playersRouter.route("/:accountId").post(
     async (req, res) => {
         const { player_id, valorant_account, valorant_tag, region, level, account_id} = req.body
         await prisma.players.create({
-            where:{
-                account_id: parseInt(req.params.accountId)
-            },
             data: {
                 player_id,
                 valorant_account,
                 valorant_tag,
                 region,
-                level
+                level,
+                account_id: parseInt(req.params.accountId)
             }
         })
         res.sendStatus(200)
@@ -74,7 +72,7 @@ playersRouter.route("/accounts/:accountId").put(
         const { player_id, valorant_account, valorant_tag, region, level, account_id} = req.body
         await prisma.players.update({
         where:{
-            account_id: parseInt(req.params.accountId)
+            player_id: parseInt(req.params.accountId)
         },
         data: {
             valorant_account,
@@ -86,16 +84,9 @@ playersRouter.route("/accounts/:accountId").put(
     res.sendStatus(200)});
 playersRouter.route("/accounts/:accountId").delete((req, res) => {
     async (req, res) => { 
-        const { player_id, valorant_account, valorant_tag, region, level, account_id} = req.body
-        await prisma.players.delete({
+        await prisma.players.deleteMany({
         where:{
             account_id: parseInt(req.params.accountId)
-        },
-        data: {
-            valorant_account,
-            valorant_tag,
-            region,
-            level
         }
     })
     res.sendStatus(200)}

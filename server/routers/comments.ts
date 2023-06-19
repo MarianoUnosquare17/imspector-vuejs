@@ -159,14 +159,14 @@ commentRouter.route("/").get((req, res) => {
         matchId
     } = req.query
 
+    const config: any = {where:{} }
+
     if(valorant_account){
-        res.send("Get comments given the valorant account " + valorant_account)
+        config.where.valorant_account = parseInt(valorant_account as string)
     } else if(map){
-        res.send("Get comments given the map  " + map)
-    } else if(valorant_account && map){
-        res.send("Get comments given the valorant account and map " + valorant_account + map)
+        config.where.map = parseInt(map as string)
     } else if(matchId){
-        res.send("Get comments given the match id " + matchId)
+        config.where.matchId = parseInt(matchId as string)
     } else res.send("Get all comments")
     });
  commentRouter.route("/matches/:matchId").get(async(req, res) => {
@@ -195,18 +195,16 @@ commentRouter.route("/matches/:matchId").post(
     async (req, res) => {
         const { comment } = req.body
         await prisma.player_match_comments.create({
-            where:{
-                player_match_id: parseInt(req.params.matchId)
-            },
             data: {
-                comment
+                comment,
+                player_match_id: parseInt(req.params.matchId)
             }
         })
         res.sendStatus(200)
     });
 commentRouter.route("/matches/:commentId").put( async(req, res) => {
     const { comment } = req.body
-    await prisma.player_match_comments.update({
+    await prisma.player_match_comments.updateMany({
         where:{
             player_match_id: parseInt(req.params.commentId)
         },
@@ -217,13 +215,9 @@ commentRouter.route("/matches/:commentId").put( async(req, res) => {
     res.sendStatus(200)
 });
 commentRouter.route("/matches/:commentId").delete(async(req, res) => {
-    const { comment } = req.body
-    await prisma.player_match_comments.delete({
+    await prisma.player_match_comments.deleteMany({
         where:{
-            player_match_id: parseInt(req.params.matchId)
-        },
-        data: {
-            comment
+            player_match_id: parseInt(req.params.commentId)
         }
     })
     res.sendStatus(200)
