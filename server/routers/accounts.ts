@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
-import { PrismaClient } from "@prisma/client";
+import { accountController } from "../controllers/accounts";
+
 /**
 * @openapi
 * /Users:
@@ -159,24 +160,10 @@ import { PrismaClient } from "@prisma/client";
 
 
 const accountsRouter = Router();
-const prisma = new PrismaClient()
 
-accountsRouter.route("/").get(async (req, res) => {
-    const accounts = await prisma.accounts.findMany({})
-    return res.status(200).json(accounts)
-});
-accountsRouter.route("/:accountId").get(async (req, res) => {
-    const account = await prisma.accounts.findUnique({
-        where: {
-            account_id: parseInt(req.params.accountId)
-        }
-    })
-    if (account) {
-        return res.status(200).json(account)
-    } else {
-        res.status(400)
-    }
-});
+
+accountsRouter.route("/").get(accountController.getAccounts);
+accountsRouter.route("/:accountId").get(accountController.getAccount);
 accountsRouter.route("/").post(
     [
         check('username')
@@ -196,40 +183,8 @@ accountsRouter.route("/").post(
             .matches(/[!@#$%^&*(),.?":{}|<>]/)
             .withMessage("Your password should have at least one special character"),
     ],
-    validate,
-    async (req, res) => {
-            const { username, email, password } = req.body
-            await prisma.accounts.create({
-                data: {
-                    username,
-                    email,
-                    password
-                }
-            })
-            res.sendStatus(200)
-    });
-accountsRouter.route("/:userId").put(
-    async (req, res) => {
-        const { username, email, password } = req.body
-        await prisma.accounts.update({
-            where: {
-                account_id: parseInt(req.params.userId)
-            },
-            data: {
-                username,
-                email,
-                password
-            },
-        })
-        res.sendStatus(203)
-    });
-accountsRouter.route("/:userId").delete(async (req, res) => {
-    await prisma.accounts.delete({
-        where: {
-            account_id: parseInt(req.params.userId)
-        },
-    })
-    res.sendStatus(200)
-});
+    validate, accountController.postAccount);
+accountsRouter.route("/:userId").put(accountController.updateAccount);
+accountsRouter.route("/:userId").delete(accountController.deleteAccount);
 
 export { accountsRouter };

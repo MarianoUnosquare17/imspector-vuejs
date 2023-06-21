@@ -171,21 +171,21 @@ const prisma = new PrismaClient()
  */
 
 
-tacticsRouter.route("/").get( async(req, res) => {
-    const {
-        map,
-        agent,
-    } = req.query
-    const config = {where:{}}
+// tacticsRouter.route("/").get( async(req, res) => {
+//     const {
+//         map,
+//         agent,
+//     } = req.query
+//     const config = {where:{}}
 
-    if(map){
-        config.where.map = map
-    } else if(agent){
-        config.where.agent = agent
-    } else res.send("Couldnt get tactic")
+//     if(map){
+//         config.where.map = map
+//     } else if(agent){
+//         config.where.agent = agent
+//     } else res.send("Couldnt get tactic")
 
-    await prisma.tactics.findMany(config)
-    });
+//     await prisma.tactics.findMany(config)
+//     });
     
     tacticsRouter.route('/').post(
         [
