@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import validate from "../utils/validation";
-import { PrismaClient } from "@prisma/client";
+import { tacticsController } from "../controllers/tactics";
 const tacticsRouter = Router();
-const prisma = new PrismaClient()
+
 
 /**
 * @openapi
@@ -195,59 +195,12 @@ const prisma = new PrismaClient()
             .withMessage('Tactic must be no longer than 120 characters'),
 
             ],
-            validate,
-        async (req, res) => {
-            const { tactic, map_id, agent_id, created_by } = req.body
-            await prisma.tactics.create({
-                data: {
-                    tactic,
-                    map_id,
-                    agent_id,
-                    created_by
-                }
-            })
-            res.sendStatus(200)
-        });
+            validate, tacticsController.postTactic);
 
-    tacticsRouter.route("/:tacticId").get(async(req, res) => {
-        await prisma.tactics.findUnique({
-            where:{
-                tactic_id: parseInt(req.params.tacticId)
-            }
-        })
-        res.sendStatus(200)
-    });
-    tacticsRouter.route("/:tacticId").put(async(req, res) => {
-        const { tactic, map_id, agent_id, created_by } = req.body
-        await prisma.tactics.update({
-            where:{
-                tactic_id: parseInt(req.params.tacticId)
-            },
-            data: {
-                tactic,
-                map_id,
-                agent_id,
-                created_by
-            }
-        })
-        res.sendStatus(200)
-    });
+    tacticsRouter.route("/:tacticId").get(tacticsController.getTactic);
+    tacticsRouter.route("/:tacticId").put(tacticsController.updateTactic);
 
-    tacticsRouter.route("/:tacticId").delete(async(req, res) => {
-        const { tactic, map_id, agent_id, created_by } = req.body
-        await prisma.tactics.update({
-            where:{
-                tactic_id: parseInt(req.params.tacticId)
-            },
-            data: {
-                tactic,
-                map_id,
-                agent_id,
-                created_by
-            }
-        })
-        res.sendStatus(200)
-    });
+    tacticsRouter.route("/:tacticId").delete(tacticsController.deleteTactic);
 
 
 export { tacticsRouter };
