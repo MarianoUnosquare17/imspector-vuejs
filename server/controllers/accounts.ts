@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+const bcrypt = require('bcrypt')
+
 const prisma = new PrismaClient()
 
 async function getAccounts (req: Request, res: Response){
@@ -22,11 +24,12 @@ async function getAccount (req: Request, res: Response){
 
 async function postAccount (req: Request, res: Response){
     const { username, email, password } = req.body
+    const hashPassword = await bcrypt.hash(password, 10)
     await prisma.accounts.create({
         data: {
             username,
             email,
-            password
+            password: hashPassword
         }
     })
     res.sendStatus(200)
@@ -34,6 +37,7 @@ async function postAccount (req: Request, res: Response){
 
 async function updateAccount (req: Request, res: Response){
     const { username, email, password } = req.body
+    const hashPassword = await bcrypt.hash(password, 10)
     await prisma.accounts.update({
         where: {
             account_id: parseInt(req.params.userId)
@@ -41,7 +45,7 @@ async function updateAccount (req: Request, res: Response){
         data: {
             username,
             email,
-            password
+            password: hashPassword
         },
     })
     res.sendStatus(200)
