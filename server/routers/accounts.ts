@@ -3,167 +3,63 @@ import { check } from "express-validator";
 import validate from "../utils/validation";
 import { accountController } from "../controllers/accounts";
 
-/**
-* @openapi
-* /Users:
-*   get:
-*     tags: [
-*        Users
-*     ]
-*     responses:
-*       200:
-*         description: OK
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '[
-*                          { "id": 1, "username": "DonBarre", "user_email": "email@email.com", "user_password": "Password1", "valorant_account": "Mikenugget", "valorant_tag": "1313"}]'
-*       204:
-*         description: No user found
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "User not found" }'
-*       401:
-*         description: Unauthorized
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "Unauthorized" }'
-*   post:
-*     tags: [
-*        Users
-*     ]
-*     responses:
-*       200:
-*         description: OK
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '[
-*                          { "id": 0, "username": "String", "user_email": "String", "user_password": "String", "valorant_account": "String", "valorant_tag": "String"}]'
-*       400:
-*         description: Invalid username or password
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "Invalid username or password" }'
-* 
-* /Users{valorant_account}:
-*   get:
-*     tags: [
-*        Users
-*     ]
-*     responses:
-*       200:
-*         description: OK
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '[
-*                          { "id": 1, "username": "DonBarre", "user_email": "email@email.com", "user_password": "Password1", "valorant_account": "Mikenugget", "valorant_tag": "1313"}]'
-*       204:
-*         description: No user found
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "User not found" }'
-*       401:
-*         description: Unauthorized
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "Unauthorized" }'
-* 
-*
-* /Users/{id}:
-*   put:
-*     tags: [
-*        Users
-*     ]
-*     responses:
-*       200:
-*         description: OK
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '[
-*                          { "id": 1, "username": "DonBarre", "user_email": "email@email.com", "user_password": "Password1", "valorant_account": "Mikenugget", "valorant_tag": "1313"}]'
-*       204:
-*         description: No user found
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "User not found" }'
-*       401:
-*         description: Unauthorized
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "Unauthorized" }'
-*
-*   delete:
-*     tags: [
-*        Users
-*     ]
-*     responses:
-*       200:
-*         description: OK
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '[
-*                          { "id": 1, "username": "DonBarre", "user_email": "email@email.com", "user_password": "Password1", "valorant_account": "Mikenugget", "valorant_tag": "1313"}]'
-*       204:
-*         description: No user found
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "User not found" }'
-*       401:
-*         description: Unauthorized
-*         content:
-*             application/json:
-*                 examples:
-*                     jsonObject:
-*                         summary: An example JSON response
-*                         value: '{ "message": "Unauthorized" }'
-* 
-*
- */
-
 
 const accountsRouter = Router();
 
-
+/**
+ * @openapi
+ * /accounts:
+ *   get:
+ *     tags: [
+ *        Accounts
+ *     ]
+ *     summary: Get all accounts
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 accountsRouter.route("/").get(accountController.getAccounts);
+
+/**
+ * @openapi
+ * /accounts/{accountId}:
+ *   get:
+ *     summary: Get an account by ID
+ *     parameters:
+ *       - in: path
+ *         name: accountId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 accountsRouter.route("/:accountId").get(accountController.getAccount);
+
+/**
+ * @openapi
+ * /accounts:
+ *   post:
+ *     summary: Create a new account
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       400:
+ *         description: Bad request
+ */
 accountsRouter.route("/").post(
     [
         check('username')
@@ -184,7 +80,49 @@ accountsRouter.route("/").post(
             .withMessage("Your password should have at least one special character"),
     ],
     validate, accountController.postAccount);
+/**
+* @openapi
+* /accounts/{userId}:
+*   put:
+*     summary: Update an account by ID
+*     parameters:
+*       - in: path
+*         name: userId
+*         required: true
+*         schema:
+*           type: integer
+*     requestBody:
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               username:
+*                 type: string
+*               email:
+*                 type: string
+*               password:
+*                 type: string
+*     responses:
+*       200:
+*         description: Successful response
+*/
 accountsRouter.route("/:userId").put(accountController.updateAccount);
+/**
+ * @openapi
+ * /accounts/{userId}:
+ *   delete:
+ *     summary: Delete an account by ID
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 accountsRouter.route("/:userId").delete(accountController.deleteAccount);
 
 export { accountsRouter };

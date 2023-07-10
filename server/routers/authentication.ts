@@ -8,4 +8,4 @@ authenticationRouter.route('/').post(authenticationController.authenticate)
 
 
 
-export {authenticationRouter}
+export { authenticationRouter };

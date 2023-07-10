@@ -44,10 +44,10 @@ app.use(cors())
 app.use(express.json());
 
 app.use('/authentication', authenticationRouter)
+app.use('/accounts', accountsRouter)
 
 app.all('*',verifyToken)
 
-app.use('/accounts', accountsRouter)
 app.use('/comments', commentRouter)
 app.use('/tactics', tacticsRouter)
 app.use('/matches', matchesRouter)
