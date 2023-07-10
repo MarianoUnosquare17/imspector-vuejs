@@ -16,7 +16,7 @@ async function getMatches(req: Request, res: Response) {
         config.where.agent_id = parseInt(agent as string)
     } else if (player_id) {
         config.where.player_id = parseInt(player_id as string)
-    } else res.send("Couldnt get match")
+    } else return res.send("Couldnt get match")
 
     await prisma.player_matches.findMany(config)
 }
@@ -31,7 +31,7 @@ async function getMatch(req: Request, res: Response) {
         if (match) {
             return res.status(200).json(match)
         } else {
-            res.status(400)
+            return res.status(400)
         }
     }
 }
@@ -68,7 +68,7 @@ async function postMatch(req: Request, res: Response) {
             player_match_id: parseInt(req.params.playerId)
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 
@@ -106,7 +106,7 @@ async function updateMatch(req: Request, res: Response) {
             player_match_mode_id
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 
@@ -117,7 +117,7 @@ async function deleteMatch(req: Request, res: Response) {
             player_match_id: parseInt(req.params.playerId)
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 

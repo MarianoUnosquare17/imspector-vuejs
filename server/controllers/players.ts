@@ -11,7 +11,7 @@ async function getPlayerAccountId(req: Request, res: Response) {
     if (player) {
         return res.sendStatus(200).json(player)
     } else {
-        res.sendStatus(400)
+        return res.sendStatus(400)
     }
 
 }
@@ -25,7 +25,7 @@ async function getPlayerPlayerId(req: Request, res: Response) {
     if (player) {
         return res.status(200).json(player)
     } else {
-        res.status(400)
+        return res.status(400)
     }
 
 }
@@ -46,7 +46,7 @@ async function postPlayers(req: Request, res: Response) {
             account_id: parseInt(req.params.accountId)
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 
 }
 
@@ -63,7 +63,7 @@ async function updatePlayer(req: Request, res: Response) {
             level
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 
@@ -73,7 +73,7 @@ async function deletePlayer(req: Request, res: Response) {
                 account_id: parseInt(req.params.accountId)
             }
         })
-        res.sendStatus(200)
+        return res.sendStatus(200)
     }
 
 

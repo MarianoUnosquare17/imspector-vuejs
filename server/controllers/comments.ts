@@ -17,7 +17,7 @@ async function getAllComments(req: Request, res: Response) {
         config.where.map = parseInt(map as string)
     } else if (player_match_id) {
         config.where.player_match_id = parseInt(player_match_id as string)
-    } else res.send("Get all comments")
+    } else return res.send("Get all comments")
 
     await prisma.player_match_comments.findMany(config)
 
@@ -35,7 +35,7 @@ async function getMatchComment(req: Request, res: Response) {
     if (comments) {
         return res.status(200).json(comments)
     } else {
-        res.status(400)
+       return res.status(400)
     }
 }
 
@@ -47,7 +47,7 @@ async function postMatchComment(req: Request, res: Response) {
             player_match_id: parseInt(req.params.matchId)
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 async function updateMatchComment(req: Request, res: Response) {
@@ -61,7 +61,7 @@ async function updateMatchComment(req: Request, res: Response) {
             comment
         }
     })
-    res.sendStatus(200)
+   return res.sendStatus(200)
 }
 
 
@@ -71,7 +71,7 @@ async function deleteMatchComment(req: Request, res: Response) {
             player_match_id: parseInt(req.params.commentId)
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 const commentController = {

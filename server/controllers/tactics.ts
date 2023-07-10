@@ -12,7 +12,7 @@ async function getTactic(req: Request, res: Response) {
             tactic_id: parseInt(req.params.tacticId)
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 
@@ -27,7 +27,7 @@ async function postTactic(req: Request, res: Response) {
             created_by
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 
 }
 
@@ -45,7 +45,7 @@ async function updateTactic(req: Request, res: Response) {
             created_by
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 
@@ -63,7 +63,7 @@ async function deleteTactic(req: Request, res: Response) {
             created_by
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 

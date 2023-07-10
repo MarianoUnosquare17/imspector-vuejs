@@ -29,17 +29,18 @@ async function authenticate(req, res) {
         console.log('Password comparison:', passwordCorrect);
 
         if (passwordCorrect) {
-            const accessToken = jwt.sign({ sub: user.account_id }, 'ValorantSecret', {
+            
+            const accessToken = jwt.sign({ sub: user.account_id }, process.env.JWT_SECRET, {
                 expiresIn: 600
             })
             console.log('Access token:', accessToken);
 
-            res.status(200).json({ accessToken })
+            return res.status(200).json({ accessToken })
         }
     }
 
     console.log('Authentication failed');
-    res.sendStatus(401)
+    return res.sendStatus(401)
 }
 
 module.exports = {
