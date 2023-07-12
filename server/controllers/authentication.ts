@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from '../utils/prisma'
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
 async function authenticate(req, res) {
 

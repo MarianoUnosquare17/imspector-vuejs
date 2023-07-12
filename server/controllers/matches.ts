@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient()
+import { prisma } from '../utils/prisma'
+import { Prisma } from "@prisma/client";
+// import { Prisma, PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient()
 
 async function getMatches(req: Request, res: Response) {
     const {

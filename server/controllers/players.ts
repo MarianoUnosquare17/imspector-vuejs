@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient()
+import { prisma } from '../utils/prisma'
 
 async function getPlayerAccountId(req: Request, res: Response) {
     const player = await prisma.players.findUnique({

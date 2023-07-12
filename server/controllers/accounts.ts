@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from '../utils/prisma'
 const bcrypt = require('bcrypt')
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
 async function getAccounts (req: Request, res: Response){
     const accounts = await prisma.accounts.findMany({})
@@ -18,7 +18,7 @@ async function getAccount (req: Request, res: Response){
     if (account) {
         return res.status(200).json(account)
     } else {
-        res.status(400)
+        return res.status(400)
     }
 }
 
@@ -32,7 +32,7 @@ async function postAccount (req: Request, res: Response){
             password: hashPassword
         }
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 async function updateAccount (req: Request, res: Response){
@@ -48,7 +48,7 @@ async function updateAccount (req: Request, res: Response){
             password: hashPassword
         },
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 async function deleteAccount (req: Request, res: Response){
@@ -57,7 +57,7 @@ async function deleteAccount (req: Request, res: Response){
             account_id: parseInt(req.params.userId)
         },
     })
-    res.sendStatus(200)
+    return res.sendStatus(200)
 }
 
 const accountController = {
