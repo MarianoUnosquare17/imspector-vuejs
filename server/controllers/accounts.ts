@@ -4,12 +4,15 @@ const bcrypt = require('bcrypt')
 
 // const prisma = new PrismaClient()
 
-async function getAccounts (req: Request, res: Response){
+async function getAccounts(req: Request, res: Response) {
     const accounts = await prisma.accounts.findMany({})
-    return res.status(200).json(accounts)
+    if (accounts) {
+        return res.status(200).json(accounts)
+    }
+    return res.status(400)
 }
 
-async function getAccount (req: Request, res: Response){
+async function getAccount(req: Request, res: Response) {
     const account = await prisma.accounts.findUnique({
         where: {
             account_id: parseInt(req.params.accountId)
@@ -22,7 +25,7 @@ async function getAccount (req: Request, res: Response){
     }
 }
 
-async function postAccount (req: Request, res: Response){
+async function postAccount(req: Request, res: Response) {
     const { username, email, password } = req.body
     const hashPassword = await bcrypt.hash(password, 10)
     await prisma.accounts.create({
@@ -35,7 +38,7 @@ async function postAccount (req: Request, res: Response){
     return res.sendStatus(200)
 }
 
-async function updateAccount (req: Request, res: Response){
+async function updateAccount(req: Request, res: Response) {
     const { username, email, password } = req.body
     const hashPassword = await bcrypt.hash(password, 10)
     await prisma.accounts.update({
@@ -51,7 +54,7 @@ async function updateAccount (req: Request, res: Response){
     return res.sendStatus(200)
 }
 
-async function deleteAccount (req: Request, res: Response){
+async function deleteAccount(req: Request, res: Response) {
     await prisma.accounts.delete({
         where: {
             account_id: parseInt(req.params.userId)
@@ -65,4 +68,4 @@ const accountController = {
 }
 
 
-export{accountController}
+export { accountController }
