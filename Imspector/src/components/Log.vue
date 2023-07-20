@@ -45,11 +45,8 @@ export default {
   },
   methods: {
     login () {
-      // Aquí puedes agregar la lógica para procesar el inicio de sesión
-      // Por simplicidad, simplemente mostraremos un mensaje en la consola
       console.log('Email:', this.email)
       console.log('Password:', this.password)
-      // Aquí podrías hacer una llamada a un backend para autenticar al usuario
     }
   }
 }
