@@ -28,6 +28,9 @@
       <div class="mt-3">
         <router-link to="/signup" class="signup-link"
           >Create an account</router-link
+        > <br>
+        <router-link to="/signup" class="signup-link"
+          >Forgot your password?</router-link
         >
       </div>
     </div>
@@ -53,22 +56,30 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: 'Tungsten';
+  src: url('./assets/Tungsten.ttf');
+}
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 60px;
-  /* height: 100vh; */
+
+  
 }
 
 .login-card {
   width: 350px;
   padding: 20px;
+  background-color: #3e3a4c;
 }
 
 .login-title {
-  color: #f9ca2f;
-  font-size: 24px;
+  color: white;
+  font-family: Tungsten;
+  font-size: 35px;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -80,35 +91,32 @@ export default {
 .form-control {
   width: 100%;
   padding: 10px;
-  border: 1px solid #f9ca2f;
   border-radius: 5px;
-  color: #f9ca2f;
 }
 
-.form-control::placeholder {
-  color: #f9ca2f;
-}
 
 .btn-primary {
+  font-family: Tungsten ; 
   display: block;
   width: 100%;
   padding: 10px;
   border: none !important;
   border-radius: 5px !important;
-  background-color: #f9ca2f !important;
+  background-color: #3be0c3 !important;
   color: white !important;
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: bold;
   cursor: pointer;
 }
 
 .btn-primary:hover {
-  background-color: #d9b41b !important;
+  background-color: #16b199!important;
 }
 
 .signup-link {
-  color: #f9ca2f;
+  color: white;
   text-decoration: none;
+  font-size: 14px;
 }
 
 .signup-link:hover {
